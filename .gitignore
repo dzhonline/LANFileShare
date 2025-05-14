@@ -1,0 +1,78 @@
+# Android Studio
+*.iml
+.idea/
+.gradle
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+local.properties
+.DS_Store
+*.tmp
+*.log
+
+# Jetpack Compose preview cache
+*.sketch
+
+# Android Studio Navigation Editor temp files
+.navigation/
+
+# Keystore files
+*.jks
+*.keystore
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Kotlin/Java compile files
+*.class
+
+# Generated files
+bin/
+out/
+gen/
+generated/
+
+# Log files
+*.log
+
+# NDK build folders
+obj/
+
+# IntelliJ
+*.iws
+*.ipr
+
+# VS Code project settings (if any)
+.vscode/
+
+# Crashlytics/Firebase
+crashlytics-build.properties
+fabric.properties
+
+# Gradle
+.gradle/
+*/build/
+
+# Proguard and generated folders
+proguard/
+proguard-rules.pro
+
+# Fastlane (if used)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Google Services (this can be in repo if safe)
+# Uncomment if you want to exclude
+# google-services.json
+# google-services.plist
+
+# Environment Files
+.env
+
+# CI/CD
+.ci/

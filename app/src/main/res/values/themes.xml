@@ -1,0 +1,22 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.LANFileShare" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- 关闭系统ActionBar -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <!-- Primary Color 配置 -->
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryVariant">#3700B3</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#03DAC6</item>
+        <item name="colorOnSecondary">#000000</item>
+
+        <!-- 状态栏 -->
+        <item name="android:windowLightStatusBar">true</item> <!-- ✅ 黑色字体 -->
+        <item name="android:statusBarColor">@android:color/white</item> <!-- ✅ 白色背景 -->
+
+        <item name="android:textColorPrimary">#000000</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+</resources>
