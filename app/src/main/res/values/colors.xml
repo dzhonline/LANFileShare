@@ -1,4 +1,33 @@
 <resources>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+    <color name="bg_light">#F7F9ED</color>
+    <color name="bg_card">#F3F7E6</color>
+    <color name="bg_block">#DBEADD</color>
+    <color name="border_block">#C4DCD3</color>
+    <color name="primary_main">#B5D5D0</color>
+
+    <color name="primary_dark">#A3CCC3</color>
+    <color name="text_primary">#5B8481</color>
+    <color name="text_secondary">#7D8F87</color>
+
+    <!-- 2048 数字背景色（顺序使用） -->
+    <color name="num_2">#FAE094</color>
+    <color name="num_4">#F4C4C6</color>
+    <color name="num_8">#A0DAEA</color>
+    <color name="num_16">#A2D188</color>
+    <color name="num_32">#D9BB97</color>
+    <color name="num_64">#F1CCE1</color>
+    <color name="num_128">#DFABCF</color>
+    <color name="num_256">#8FD2E6</color>
+    <color name="num_512">#5D7AB5</color>
+    <color name="num_1024">#EBCDA7</color>
+    <color name="num_2048">#C64E2F</color>
+    <color name="num_4096">#FFB6C1</color>
+    <color name="num_8192">#9FE2BF</color>
+    <color name="num_16384">#AFEEEE</color>
+    <color name="num_32768">#F08080</color>
+    <color name="num_65536">#DDA0DD</color>
+    <color name="num_131072">#FF8C00</color>
 </resources>

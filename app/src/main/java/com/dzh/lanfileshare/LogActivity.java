@@ -7,6 +7,8 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dzh.R;
+
 import java.util.List;
 
 public class LogActivity extends AppCompatActivity {

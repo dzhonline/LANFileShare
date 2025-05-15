@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.dzh.lanfileshare'
+    namespace 'com.dzh'
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.dzh.lanfileshare"
+        applicationId "com.dzh"
         minSdk 24
         targetSdk 35
         versionCode 1

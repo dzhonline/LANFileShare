@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dzh.lanfileshare">
+    package="com.dzh">
 
     <!-- 通信 + 服务权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,11 +34,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LogActivity" />
+        <activity android:name=".lanfileshare.LogActivity" />
+        <activity android:name=".lanfileshare.LanFileShareActivity" />
+        <activity android:name=".game_2048.Game2048Activity" />
 
         <!-- ✅ 启动 Http 服务，声明前台服务类型 -->
         <service
-            android:name=".HttpService"
+            android:name=".lanfileshare.HttpService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
     </application>
