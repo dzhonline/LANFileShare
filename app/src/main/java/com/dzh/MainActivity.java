@@ -1,4 +1,4 @@
-package com.dzh.lanfileshare;
+package com.dzh;
 
 import android.Manifest;
 import android.content.Intent;
@@ -22,6 +22,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.dzh.lanfileshare.HttpService;
+import com.dzh.lanfileshare.LogActivity;
+import com.dzh.lanfileshare.R;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
