@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvAnimationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="游戏动画"
+        android:textSize="16sp"
+        android:textColor="@android:color/black" />
+
+    <SeekBar
+        android:id="@+id/seekAnimationSpeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="500" />
+
+    <TextView
+        android:id="@+id/tvAnimationValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="当前：120ms"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

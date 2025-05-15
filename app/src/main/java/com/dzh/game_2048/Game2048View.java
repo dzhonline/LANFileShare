@@ -23,11 +23,15 @@ public class Game2048View extends View {
     private final Game2048Model model;
     private final GestureDetector gestureDetector;
     private SwipeListener.SwipeCallback externalCallback;
+    private int animationDuration = 120;
+    public void setAnimationDuration(int duration) {
+        this.animationDuration = Math.max(duration, 50); // 保底，防止设置为0
+    }
 
     private final List<AnimatedCell> animatedCells = new ArrayList<>();
     private boolean isAnimating = false;
+    private float animProgress = 1f;
 
-    // 扩展颜色表（可继续扩展）
     int[] colorResList = {
             R.color.num_2, R.color.num_4, R.color.num_8,
             R.color.num_16, R.color.num_32, R.color.num_64,
@@ -62,27 +66,35 @@ public class Game2048View extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int cellSize = getWidth() / gridSize;
-
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(cellSize * 0.4f);
         paint.setAntiAlias(true);
 
-        // ✅ 每格都先绘制背景，避免动画覆盖不完整
+        // 背景格子（背景必须统一绘制）
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 drawCellBackground(canvas, i, j, cellSize);
-
-                if (!isAnimating || !isCellInAnimation(i, j)) {
-                    drawCellForeground(canvas, i, j, model.grid[i][j], cellSize);
-                }
             }
         }
 
-        // ✅ 动画中的格子（绘在移动轨迹上）
-        for (AnimatedCell animCell : animatedCells) {
-            float drawX = animCell.animX * cellSize;
-            float drawY = animCell.animY * cellSize;
-            drawAnimatedCell(canvas, animCell.value, drawX, drawY, cellSize);
+        // 静态格子（排除参与动画的目标格子）
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                int value = model.grid[i][j];
+
+                if (isAnimating && isCellTarget(i, j)) {
+                    continue; // 动画中由 AnimatedCell 控制
+                }
+
+                drawCellStatic(canvas, i, j, value, cellSize);
+            }
+        }
+
+        // 动画格子绘制（主动画控制流程）
+        if (isAnimating) {
+            for (AnimatedCell cell : animatedCells) {
+                drawCellAnimated(canvas, cell, cellSize);
+            }
         }
     }
 
@@ -93,67 +105,92 @@ public class Game2048View extends View {
         canvas.drawRect(left, top, left + cellSize, top + cellSize, paint);
     }
 
-    private void drawCellForeground(Canvas canvas, int i, int j, int value, int cellSize) {
+    private void drawCellStatic(Canvas canvas, int i, int j, int value, int cellSize) {
         if (value == 0) return;
         float left = j * cellSize;
         float top = i * cellSize;
 
-        int index = (int) (Math.log(value) / Math.log(2)) - 1;
-        int colorIndex = index % colorResList.length;
-        paint.setColor(ContextCompat.getColor(getContext(), colorResList[colorIndex]));
+        paint.setColor(getColorForValue(value));
         canvas.drawRect(left, top, left + cellSize, top + cellSize, paint);
+        drawCenteredText(canvas, String.valueOf(value), left, top, cellSize);
+    }
 
+    private void drawCellAnimated(Canvas canvas, AnimatedCell cell, int cellSize) {
+        float startX = cell.fromY * cellSize;
+        float startY = cell.fromX * cellSize;
+        float endX = cell.toY * cellSize;
+        float endY = cell.toX * cellSize;
+
+        float currentX = startX + (endX - startX) * animProgress;
+        float currentY = startY + (endY - startY) * animProgress;
+
+        paint.setColor(interpolateColor(getColorForValue(cell.fromValue), getColorForValue(cell.toValue)));
+        canvas.drawRect(currentX, currentY, currentX + cellSize, currentY + cellSize, paint);
+
+        if (animProgress <= 0.5f) {
+            // 前数字淡出阶段
+            int fromAlpha = (int) ((1f - animProgress * 2) * 255); // 1 -> 0
+            paint.setAlpha(fromAlpha);
+            drawCenteredText(canvas, String.valueOf(cell.fromValue), currentX, currentY, cellSize);
+        } else {
+            // 后数字淡入阶段
+            int toAlpha = (int) ((animProgress - 0.5f) * 2 * 255); // 0 -> 1
+            paint.setAlpha(toAlpha);
+            drawCenteredText(canvas, String.valueOf(cell.toValue), currentX, currentY, cellSize);
+        }
+
+        paint.setAlpha(255); // 重置透明度
+    }
+
+    private void drawCenteredText(Canvas canvas, String text, float left, float top, int size) {
         paint.setColor(Color.BLACK);
-        canvas.drawText(String.valueOf(value),
-                left + cellSize / 2f,
-                top + cellSize / 2f + paint.getTextSize() / 3,
+        canvas.drawText(text,
+                left + size / 2f,
+                top + size / 2f + paint.getTextSize() / 3f,
                 paint);
     }
 
-    private void drawAnimatedCell(Canvas canvas, int value, float left, float top, int cellSize) {
-        paint.setColor(ContextCompat.getColor(getContext(), R.color.bg_block));
-        canvas.drawRect(left, top, left + cellSize, top + cellSize, paint);
-
-        if (value == 0) return;
-
-        int index = (int) (Math.log(value) / Math.log(2)) - 1;
-        int colorIndex = index % colorResList.length;
-
-        paint.setColor(ContextCompat.getColor(getContext(), colorResList[colorIndex]));
-        canvas.drawRect(left, top, left + cellSize, top + cellSize, paint);
-
-        paint.setColor(Color.BLACK);
-        canvas.drawText(String.valueOf(value),
-                left + cellSize / 2f,
-                top + cellSize / 2f + paint.getTextSize() / 3,
-                paint);
-    }
-
-    private boolean isCellInAnimation(int row, int col) {
-        for (AnimatedCell animCell : animatedCells) {
-            if (animCell.toX == row && animCell.toY == col) return true;
+    private boolean isCellTarget(int row, int col) {
+        for (AnimatedCell c : animatedCells) {
+            if (c.toX == row && c.toY == col) return true;
         }
         return false;
     }
 
-    /**
-     * 动画入口：执行一次移动 + 播放
-     */
+    private int getColorForValue(int value) {
+        if (value == 0) return Color.LTGRAY;
+        int index = (int) (Math.log(value) / Math.log(2)) - 1;
+        index = index % colorResList.length;
+        return ContextCompat.getColor(getContext(), colorResList[index]);
+    }
+
+    private int interpolateColor(int fromColor, int toColor) {
+        int r1 = Color.red(fromColor);
+        int g1 = Color.green(fromColor);
+        int b1 = Color.blue(fromColor);
+        int r2 = Color.red(toColor);
+        int g2 = Color.green(toColor);
+        int b2 = Color.blue(toColor);
+
+        int r = (int) (r1 + (r2 - r1) * animProgress);
+        int g = (int) (g1 + (g2 - g1) * animProgress);
+        int b = (int) (b1 + (b2 - b1) * animProgress);
+
+        return Color.rgb(r, g, b);
+    }
+
     public void playMoveAnimation(List<AnimatedCell> animations) {
         if (animations.isEmpty()) return;
 
         isAnimating = true;
-        this.animatedCells.clear();
-        this.animatedCells.addAll(animations);
+        animatedCells.clear();
+        animatedCells.addAll(animations);
+        animProgress = 0f;
 
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
-        animator.setDuration(100); // 🎯 更快的动画
+        animator.setDuration(animationDuration);
         animator.addUpdateListener(animation -> {
-            float progress = (float) animation.getAnimatedValue();
-            for (AnimatedCell ac : animatedCells) {
-                ac.animX = ac.fromY + (ac.toY - ac.fromY) * progress;
-                ac.animY = ac.fromX + (ac.toX - ac.fromX) * progress;
-            }
+            animProgress = (float) animation.getAnimatedValue();
             invalidate();
         });
         animator.addListener(new android.animation.AnimatorListenerAdapter() {
@@ -161,7 +198,14 @@ public class Game2048View extends View {
             public void onAnimationEnd(android.animation.Animator animation) {
                 isAnimating = false;
                 animatedCells.clear();
+
+                // ✅ 动画完成后再请求 spawn 刷新（刷新数据层）
                 invalidate();
+
+                if (externalCallback != null) {
+                    // 通知 activity 做 spawn、check 状态等
+                    externalCallback.onSwipe("done"); // 你可扩展一个 "done" 标记
+                }
             }
         });
         animator.start();

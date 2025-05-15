@@ -10,7 +10,7 @@ public class Game2048Model {
     private final Random random = new Random();
     public boolean reached2048 = false;
 
-    // ⏺️ 每一次合并/移动路径保存在这里
+    // 每一次合并/移动路径动画记录
     private final List<AnimatedCell> latestAnimations = new ArrayList<>();
 
     public Game2048Model(int size) {
@@ -42,10 +42,18 @@ public class Game2048Model {
             int[] line = new int[size];
             for (int j = 0; j < size; j++) {
                 switch (dir) {
-                    case "up":    line[j] = grid[j][i]; break;
-                    case "down":  line[j] = grid[size - 1 - j][i]; break;
-                    case "left":  line[j] = grid[i][j]; break;
-                    case "right": line[j] = grid[i][size - 1 - j]; break;
+                    case "up":
+                        line[j] = grid[j][i];
+                        break;
+                    case "down":
+                        line[j] = grid[size - 1 - j][i];
+                        break;
+                    case "left":
+                        line[j] = grid[i][j];
+                        break;
+                    case "right":
+                        line[j] = grid[i][size - 1 - j];
+                        break;
                 }
             }
 
@@ -57,6 +65,7 @@ public class Game2048Model {
                 if (line[j] == 0) continue;
 
                 if (index > 0 && merged[index - 1] == line[j] && !mergedFlags[index - 1]) {
+                    int oldValue = merged[index - 1];
                     merged[index - 1] *= 2;
                     mergedFlags[index - 1] = true;
 
@@ -64,14 +73,15 @@ public class Game2048Model {
                         reached2048 = true;
                     }
 
-                    // 记录动画路径
-                    addAnim(i, j, index - 1, dir, merged[index - 1], true);
+                    // ✅ 合并动画：记录从 j → index-1 的移动
+                    addAnim(i, j, index - 1, dir, oldValue, merged[index - 1]);
                     moved = true;
                 } else {
                     merged[index] = line[j];
 
-                    if (index != j) { // 如果位置变了，说明发生了移动
-                        addAnim(i, j, index, dir, merged[index], false);
+                    if (index != j) {
+                        // ✅ 普通移动动画
+                        addAnim(i, j, index, dir, line[j], line[j]);
                         moved = true;
                     }
 
@@ -82,10 +92,18 @@ public class Game2048Model {
             for (int j = 0; j < size; j++) {
                 int value = merged[j];
                 switch (dir) {
-                    case "up":       newGrid[j][i] = value; break;
-                    case "down":     newGrid[size - 1 - j][i] = value; break;
-                    case "left":     newGrid[i][j] = value; break;
-                    case "right":    newGrid[i][size - 1 - j] = value; break;
+                    case "up":
+                        newGrid[j][i] = value;
+                        break;
+                    case "down":
+                        newGrid[size - 1 - j][i] = value;
+                        break;
+                    case "left":
+                        newGrid[i][j] = value;
+                        break;
+                    case "right":
+                        newGrid[i][size - 1 - j] = value;
+                        break;
                 }
             }
         }
@@ -95,12 +113,11 @@ public class Game2048Model {
         return moved;
     }
 
-    /** 动画记录生成 */
-    private void addAnim(int i, int j, int newPosIndex, String dir, int value, boolean merging) {
-        int fromX = i;
-        int fromY = j;
-        int toX = i;
-        int toY = j;
+    /**
+     * 记录动画信息（用于滑动/合并时的视觉表现）
+     */
+    private void addAnim(int i, int j, int newPosIndex, String dir, int fromValue, int toValue) {
+        int fromX = i, fromY = j, toX = i, toY = j;
 
         switch (dir) {
             case "up":
@@ -129,7 +146,7 @@ public class Game2048Model {
                 break;
         }
 
-        latestAnimations.add(new AnimatedCell(fromX, fromY, toX, toY, value, merging));
+        latestAnimations.add(new AnimatedCell(fromX, fromY, toX, toY, fromValue, toValue));
     }
 
     public void spawn() {
