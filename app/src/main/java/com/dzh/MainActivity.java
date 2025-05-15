@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // 功能列表
         List<FunctionItem> functions = Arrays.asList(
                 new FunctionItem("📁 文件共享", R.mipmap.ic_launcher_foreground, LanFileShareActivity.class),
-                new FunctionItem("🧾 日志查看", R.mipmap.ic_launcher_foreground, LogActivity.class),
+//                new FunctionItem("🧾 日志查看", R.mipmap.ic_launcher_foreground, LogActivity.class),
                 new FunctionItem("🎮 2048", R.mipmap.ic_launcher_foreground, Game2048Activity.class)
         );
         FunctionAdapter adapter = new FunctionAdapter(functions, this);
