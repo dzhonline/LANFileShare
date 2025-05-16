@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dzh.divination.DivinationActivity;
 import com.dzh.game_2048.Game2048Activity;
 import com.dzh.lanfileshare.FunctionAdapter;
 import com.dzh.lanfileshare.FunctionItem;
@@ -57,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         List<FunctionItem> functions = Arrays.asList(
                 new FunctionItem("📁 文件共享", R.mipmap.ic_launcher_foreground, LanFileShareActivity.class),
 //                new FunctionItem("🧾 日志查看", R.mipmap.ic_launcher_foreground, LogActivity.class),
-                new FunctionItem("🎮 2048", R.mipmap.ic_launcher_foreground, Game2048Activity.class)
+                new FunctionItem("🎮 2048", R.mipmap.ic_launcher_foreground, Game2048Activity.class),
+                new FunctionItem("🧙 卜卦", R.mipmap.ic_launcher_foreground, DivinationActivity.class)
         );
         FunctionAdapter adapter = new FunctionAdapter(functions, this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

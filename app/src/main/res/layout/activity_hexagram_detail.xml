@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 顶部 Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:title="卦象解读"
+        android:titleTextColor="@android:color/white" />
+
+    <!-- 内容滚动区 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 卦名 -->
+            <TextView
+                android:id="@+id/textHexName"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- 六爻结构 -->
+            <TextView
+                android:id="@+id/textHexChart"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="20dp"
+                android:lineSpacingExtra="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- 解读内容 -->
+            <TextView
+                android:id="@+id/textHexAnalysis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#444444"
+                android:lineSpacingExtra="6dp"
+                android:text="卦象详细信息将显示在这里..." />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,54 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/mainContainer"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textProgress"
+            android:textSize="18sp"
+            android:text="第1次投掷"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <FrameLayout
+            android:id="@+id/board"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#f0f0f0"
+            android:layout_marginTop="12dp"
+            android:elevation="2dp"/>
+
+        <Button
+            android:id="@+id/btnToss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="投掷硬币 (1/6)" />
+
+        <TextView
+            android:id="@+id/textHexLines"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="当前爻象："
+            android:textColor="#222222"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp"/>
+
+        <TextView
+            android:id="@+id/textHexPicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="六爻结构："
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_marginTop="12dp"/>
+    </LinearLayout>
+</ScrollView>
